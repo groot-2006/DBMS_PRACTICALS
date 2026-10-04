@@ -1,0 +1,64 @@
+CREATE DATABASE IF NOT EXISTS college;
+
+USE college;
+
+
+-- STUDENT TABLE
+CREATE TABLE STUDENT (
+    Rollno VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(50),
+    Dateofbirth DATE
+);
+
+
+-- COURSE TABLE
+CREATE TABLE COURSE (
+    SID VARCHAR(10) PRIMARY KEY,
+    Cname VARCHAR(50) UNIQUE,
+    TotalSeats INT CHECK (TotalSeats > 0),
+    Duration INT CHECK (Duration BETWEEN 1 AND 6),
+    Coursetype VARCHAR(20) CHECK (Coursetype IN ('Fulltime', 'Parttime')),
+    TeacherInCharge VARCHAR(50)
+);
+
+
+-- SOCIETY TABLE
+CREATE TABLE SOCIETY (
+    SocID VARCHAR(10) PRIMARY KEY,
+    Socname VARCHAR(50) UNIQUE,
+    TotalSeats INT CHECK (TotalSeats > 0)
+);
+
+
+-- ADMISSION TABLE
+CREATE TABLE ADMISSION (
+    Rollno VARCHAR(10),
+    SID VARCHAR(10),
+    AdmissionDate DATE,
+    PRIMARY KEY (Rollno, SID),
+    FOREIGN KEY (Rollno)
+        REFERENCES STUDENT(Rollno)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (SID)
+        REFERENCES COURSE(SID)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+
+-- ENROLLMENT TABLE
+CREATE TABLE ENROLLMENT (
+    Rollno VARCHAR(10),
+    SocID VARCHAR(10),
+    EnrollmentDate DATE,
+    PRIMARY KEY (Rollno, SocID),
+    FOREIGN KEY (Rollno)
+        REFERENCES STUDENT(Rollno)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (SocID)
+        REFERENCES SOCIETY(SocID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
